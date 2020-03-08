@@ -1,6 +1,6 @@
 # selectmanager
 
-## Project setup
+## 2020毕业设计题目：毕业设计选题系统
 ```
 npm install
 ```
