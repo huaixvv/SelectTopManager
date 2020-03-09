@@ -30,6 +30,10 @@
 </template>
 
 <script>
+
+  import { getStudentByName } from "network/stuRequest";
+  import { getTeacherByName } from "network/teaRequest";
+  
   export default {
     name: 'Login',
     data () {
@@ -44,7 +48,32 @@
     },
     methods: {
       login(){
-        console.log(this.loginform);
+        switch (this.loginform.usertype) {
+          case '管理员':
+            
+            break;
+          case '学生':
+            getStudentByName(this.loginform.username).then(res => {
+              console.log(res);
+            });
+            break;
+          case '教师':
+            getTeacherByName(this.loginform.username, this.loginform.password).then(res => {
+              if(res.data.code== 0) {
+                alert('sucess');
+              }else{
+                 this.$message({
+                  message: res.data.msg,
+                  type: 'error',
+                  offset: 160,
+                  center: true
+                });
+              }
+              console.log(res);
+            });
+            break
+        }
+        
       }
     },
     components: {
