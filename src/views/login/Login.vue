@@ -60,7 +60,7 @@
           case '教师':
             getTeacherByName(this.loginform.username, this.loginform.password).then(res => {
               if(res.data.code== 0) {
-                alert('sucess');
+                this.$router.push('/teacher')
               }else{
                  this.$message({
                   message: res.data.msg,

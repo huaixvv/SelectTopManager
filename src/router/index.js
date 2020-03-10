@@ -2,6 +2,9 @@ import Vue from 'vue';
 import VueRouter from "vue-router";
 
 const Login = () => import('views/login/Login');
+const TeacherHome = ()=> import('views/teacherHome/TeacherHome')
+const TopicTable = () => import('views/teacherHome/TopicTable')
+const EditThesis = () => import('views/teacherHome/EditThesis')
 
 Vue.use(VueRouter);
 
@@ -13,6 +16,22 @@ const routes = [
   {
     path: '/login',
     component: Login
+  },
+  {
+    path: '/teacher',
+    component: TeacherHome,
+    children: [
+      {
+        path: '/teacher/alltopic',
+        name: 'TopicTable',
+        component: TopicTable,
+      },
+      {
+        path: '/teacher/edit',
+        name: 'EditThesis',
+        component: EditThesis,
+      },
+    ]
   }
 ];
 

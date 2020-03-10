@@ -2,11 +2,13 @@ import { studentRequest } from './request';
 
 
 //login
-export function getStudentByName(loginName) {
+export function getStudentByName(loginName, studentPwd) {
   return studentRequest({
     url: '/student/login',
-    params: {
-      loginName
+    method: 'post',
+    data: {
+      loginName,
+      studentPwd
     }
   })
 }
