@@ -6,7 +6,7 @@ export function getStudentByName(loginName, studentPwd) {
   return studentRequest({
     url: '/student/login',
     method: 'post',
-    data: {
+    params: {
       loginName,
       studentPwd
     }

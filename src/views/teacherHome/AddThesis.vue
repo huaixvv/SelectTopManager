@@ -3,9 +3,6 @@
     <div class="fromtitle el-icon-caret-right"> &nbsp;请填写/更改课题信息：</div>
     <div class="editfrom">
       <el-form :model="thesisData" :rules="rules" ref="thesisData" label-width="100px" class="demo-ruleForm">
-       <el-form-item label="课题编号" prop="thesisId">
-        <el-input v-model="thesisData.thesisId" disabled></el-input>
-      </el-form-item>
        <el-form-item label="课题名称" prop="thesisName">
         <el-input v-model="thesisData.thesisName" placeholder="请输入课题名称"></el-input>
       </el-form-item>
@@ -57,15 +54,10 @@
         <el-input type="textarea" v-model="thesisData.thesisDesc"></el-input>
       </el-form-item>
 
-      <div class="filepath" v-show="isfilepathShow">
-        课题附件： <a :href="thesisData.filePath">{{fileNamePath}}</a>，如需修改请点击上传附件
-      </div>
-
       <!-- 上传附件 -->
       <el-upload
         class="upload-demo"
         action="http://127.0.0.1:10086/file/upload"
-        :on-preview="handlePreview"
         :on-remove="handleRemove"       
         :before-remove="beforeRemove"
         :limit="1"
@@ -77,10 +69,9 @@
         >
         <el-button size="small" type="info" class="el-icon-upload el-icon--right"> 上传附件</el-button>
       </el-upload>
-      
       <div class="subtn">
         <el-form-item >
-          <el-button type="primary" @click="editThesis('thesisData')">立即修改</el-button>
+          <el-button type="primary" @click="submitForm('thesisData')">立即创建</el-button>
           <el-button @click="resetForm('thesisData')">重置</el-button>
         </el-form-item>
       </div>
@@ -92,15 +83,13 @@
 
 <script>
   import { delFile } from "network/fileRequest";
-  import { addThesis, getThesisById, editThesis } from "network/teaRequest";
+  import { addThesis } from "network/teaRequest";
   export default {
-    name: 'EditThesis',
+    name: 'AddThesis',
     data() {
       return {
         fileList:[],
-        isfilepathShow: true,
         thesisData: {
-          thesisId:'',
           thesisName: '',
           thesisCollege: '',
           teacher: '',
@@ -134,35 +123,16 @@
         }
       };
     },
-    computed:{
-      fileNamePath(){
-        return this.thesisData.thesisName +'.' + this.thesisData.filePath.split('.').pop()
-      }
-    },
-    created(){
-      this.thesisData.thesisId = this.$route.params.thesisId;
-      getThesisById(this.thesisData.thesisId).then(res => {
-         console.log(res);
-         this.thesisData.thesisName = res.data.data.thesisName;
-         this.thesisData.allowSpecial = res.data.data.allowSpecial;
-         this.thesisData.model = res.data.data.model;
-         this.thesisData.teacher = res.data.data.teacher;
-         this.thesisData.thesisCollege = res.data.data.thesisCollege;
-         this.thesisData.thesisDate = res.data.data.thesisDate;
-         this.thesisData.thesisDesc = res.data.data.thesisDesc;
-         this.thesisData.filePath = res.data.data.thesisDoc;
-         this.thesisData.thesisFrom = res.data.data.thesisFrom;
-         this.thesisData.thesisType = res.data.data.thesisType;
-      })
-    },
     methods: {
-       editThesis(formName) {
+       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            editThesis(JSON.stringify(this.thesisData), this.thesisData.thesisId).then(res => {
+            this.thesisData.teacher = window.sessionStorage.getItem("teacherName")
+            addThesis(JSON.stringify(this.thesisData)).then(res => {
+              console.log(res);
               if(res.data.data.code == 2000) {
                 this.$message({
-                  message: '课题修改成功！',
+                  message: '申报课题成功！',
                   type: 'success'
                 });
                 setTimeout(() => {
@@ -175,22 +145,15 @@
                 });
               }
             });
+
           } else {
             return false;
           }
         });
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      },
-
-      // onChange(file){
-      //   this.thesisData.fileList.push(file)
-      // },
 
       onSuccess(response, file, fileList){
         this.thesisData.filePath = response.data;
-        this.isfilepathShow = false;
         console.log(this.thesisData.filePath);
       },
       
@@ -205,11 +168,6 @@
                   })
                   
       },
-
-      handlePreview(file) {                 //点击文件列表中已上传的文件时的钩子
-        console.log(2);
-        console.log(file);
-      },
       handleExceed(files, fileList) {        //s数量超出的
         this.$message({
           message: '只允许上传一个课题相关附件，请先删除前一个文件',
@@ -223,7 +181,10 @@
                 cancelButtonText: '取消',
                 type: 'warning'
               })   
-      }
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
     }
   }
 </script>
@@ -254,16 +215,5 @@
   .subtn{
     float: right;
 
-  }
-
-  .filepath{
-    font-size: 14px;
-    margin: 30px;
-  }
-
-  .filepath a{
-    color: #409EFF;
-    text-decoration: underline #409EFF
-;
   }
 </style>

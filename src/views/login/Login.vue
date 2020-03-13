@@ -2,11 +2,11 @@
   <div id="login">
     <div class=""></div>
     <div class="title">
-      <h1>湖南文理学院</h1>
-      <h2>大学生毕业设计（论文）选题系统</h2>
+      <div>湖南文理学院</div>
+      <div>大学生毕业设计（论文）选题系统</div>
     </div>
-    <div>
-      <h3>请登录：</h3>
+    <div class="pleace-login">
+      请登录：
     </div>
     <div class="loginform">
       <el-form :model="loginform" :label-position="labelPosition" label-width="80px">
@@ -60,7 +60,9 @@
           case '教师':
             getTeacherByName(this.loginform.username, this.loginform.password).then(res => {
               if(res.data.code== 0) {
-                this.$router.push('/teacher')
+                window.sessionStorage.setItem("teacher", res.data.data.teacherId);
+                window.sessionStorage.setItem("teacherName", res.data.data.teacherName);
+                this.$router.push('/teacher/alltopic')
               }else{
                  this.$message({
                   message: res.data.msg,
@@ -71,7 +73,7 @@
               }
               console.log(res);
             });
-            break
+            break;
         }
         
       }
@@ -94,16 +96,26 @@
     height: 700px;
   }
 
-  h3{
+  .pleace-login{
     margin-right: 268px;
     color: #60636c;
     margin-top: 80px;
-
+    margin-bottom: 40px;
+    font-weight: 500;
+    font-size: 20px;
   }
   .title{
-    margin: 20px 0 20px 0;
-    color:rgb(68, 68, 68);
+    letter-spacing: 2px;
+    margin: 30px 0 20px 0;
   }
+  .title div{
+    font-size: 26px;
+    padding-top: 10px;
+    font-weight: 900;
+    color:#60636c;
+
+  }
+  
  .loginform{
    width: 340px;
    /* height:  */

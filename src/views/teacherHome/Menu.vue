@@ -28,7 +28,7 @@
         <i class="el-icon-document"></i>
         <span slot="title">我的学生</span>
       </el-menu-item>
-      <el-menu-item index="5">
+      <el-menu-item index="5" @click="teacherInfo">
         <i class="el-icon-setting"></i>
         <span slot="title">信息修改</span>
       </el-menu-item>
@@ -45,6 +45,9 @@
       }
     },
     methods: {
+      teacherInfo(){
+        this.$router.push('/teacher/info')
+      },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
       },
@@ -55,7 +58,7 @@
         this.$router.push('/teacher/alltopic')
       },
       applyThesis(){
-        this.$router.push('/teacher/edit')
+        this.$router.push('/teacher/add')
       }
     },
     components: {
