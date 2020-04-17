@@ -54,6 +54,18 @@
             break;
           case '学生':
             getStudentByName(this.loginform.username).then(res => {
+               if(res.data.code== 0) {
+                window.sessionStorage.setItem("student", res.data.data.studentId);
+                window.sessionStorage.setItem("studentName", res.data.data.studentName);
+                this.$router.push('/student')
+              }else{
+                 this.$message({
+                  message: res.data.msg,
+                  type: 'error',
+                  offset: 160,
+                  center: true
+                });
+              }
               console.log(res);
             });
             break;
