@@ -51,6 +51,126 @@
       </template>
     </el-table-column>
   </el-table>
+
+  <div class="title-s el-icon-caret-right"> &nbsp;题目列表：</div>
+  <div class="sel-condition">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini">
+      <el-form-item label="题目">
+        <el-input v-model="formInline.user" placeholder="题目"></el-input>
+      </el-form-item>
+      <el-form-item label="指导教师" class="el-item">
+        <el-input v-model="formInline.user" placeholder="指导教师"></el-input>
+      </el-form-item>
+      <el-form-item label="所属院系" class="el-item">
+        <el-select v-model="formInline.region" placeholder="">
+          <el-option label="计算机与电气工程学院" value="计算机与电气工程学院"></el-option>
+          <el-option label="文史与法学学院" value="文史与法学学院"></el-option>
+          <el-option label="外国语学院" value="外国语学院"></el-option>
+          <el-option label="机械工程学院" value="机械工程学院"></el-option>
+          <el-option label="经济与管理学院" value="经济与管理学院"></el-option>
+          <el-option label="艺术学院" value="艺术学院"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item class="el-btn">
+        <el-button type="primary" >查询</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+
+  <!-- 课题列表 -->
+    <div class="sel-table">
+      <el-table
+      style="width: 95%"
+      :data="thesisData"
+      size="mini"
+      :highlight-current-row ='true'>
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand" >
+            <el-form-item label="课题名称:">
+              <span>{{props.row.thesisName}}</span>
+            </el-form-item>
+            <el-form-item label="题目所属学院:">
+              <span>{{ props.row.thesisCollege }}</span>
+            </el-form-item>
+            <el-form-item label="题目类型:">
+              <span>{{ props.row.thesisType }}</span>
+            </el-form-item>
+            <el-form-item label="题目来源:">
+              <span>{{ props.row.thesisFrom }}</span>
+            </el-form-item>
+            <el-form-item label="指导教师:">
+              <span>{{ props.row.teacher }}</span>
+            </el-form-item>
+            <el-form-item label="教研室:">
+              <span>{{ props.row.classroom }}</span>
+            </el-form-item>
+            <el-form-item label="申报日期:">
+              <span>{{ props.row.thesisDate }}</span>
+            </el-form-item>
+            <el-form-item label="选择模式:">
+              <span>{{ props.row.model }}</span>
+            </el-form-item>
+            <el-form-item label="可选专业:">
+              <span>{{ props.row.allowSpecial }}</span>
+            </el-form-item>
+            <el-form-item label="课题附件:">
+              <span><a :href="props.row.thesisDoc" class="el-icon-document downloadUrl">&nbsp;点击查看</a></span>
+            </el-form-item>
+            <el-form-item label="课题说明:">
+              <span>{{ props.row.thesisDesc }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="编号"
+        prop="thesisId"
+        
+       >
+      </el-table-column>
+      <el-table-column
+        label="课题名称"
+        prop="thesisName"
+        width = 330
+        >
+      </el-table-column>
+      <el-table-column
+        label="指导教师"
+        prop="teacher"
+        width = 140
+        >
+      </el-table-column>
+      <el-table-column
+        label="所属学院"
+        prop="thesisDate"
+       >
+      </el-table-column>
+      <el-table-column 
+            label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini"  @click="editThesis(scope.row.thesisId)">
+              编辑
+            </el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="delThesis(scope.row.thesisId)">
+              删除
+            </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+
+<!-- 分页 -->
+  <div class="block el-page">
+    <el-pagination
+      layout="prev, pager, next"
+      :total="100">
+    </el-pagination>
+  </div>
+
   </div>
 </template>
 
@@ -66,7 +186,11 @@
           teacher: '李建',
           // Status: '确认通过',
           // Edit: '查看详情'
-        }]
+        }],
+        formInline: {
+          user: '',
+          region: ''
+        }
       }
     },
     methods: {
@@ -107,4 +231,26 @@
     color: #606266;
   }
 
+  .sel-condition{
+    margin-left: 250px;
+    margin-bottom: 20px;
+  }
+
+  .el-item{
+    margin-left: 50px;
+  }
+  .el-btn{
+    margin-left: 90px;
+  }
+
+  .sel-table{
+    margin-left: 250px;
+  }
+
+  .el-page{
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>
