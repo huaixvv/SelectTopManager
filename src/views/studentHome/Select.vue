@@ -54,15 +54,15 @@
 
   <div class="title-s el-icon-caret-right"> &nbsp;题目列表：</div>
   <div class="sel-condition">
-    <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini">
+    <el-form :inline="true" :model="selectCondition" class="demo-form-inline" size="mini">
       <el-form-item label="题目">
-        <el-input v-model="formInline.user" placeholder="题目"></el-input>
+        <el-input v-model="selectCondition.sisName" placeholder="题目" clearable></el-input>
       </el-form-item>
       <el-form-item label="指导教师" class="el-item">
-        <el-input v-model="formInline.user" placeholder="指导教师"></el-input>
+        <el-input v-model="selectCondition.sisTeacher" placeholder="指导教师" clearable></el-input>
       </el-form-item>
       <el-form-item label="所属院系" class="el-item">
-        <el-select v-model="formInline.region" placeholder="">
+        <el-select v-model="selectCondition.sisCollege" placeholder="" clearable>
           <el-option label="计算机与电气工程学院" value="计算机与电气工程学院"></el-option>
           <el-option label="文史与法学学院" value="文史与法学学院"></el-option>
           <el-option label="外国语学院" value="外国语学院"></el-option>
@@ -72,9 +72,25 @@
         </el-select>
       </el-form-item>
       <el-form-item class="el-btn">
-        <el-button type="primary" >查询</el-button>
+        <el-button type="primary" @click="selectByCondition">查询</el-button>
       </el-form-item>
     </el-form>
+  </div>
+
+  <!-- 分页 -->
+  <div class="block el-page">
+    <el-pagination
+      background
+      small
+      @prev-click="prevpage"
+      @next-click="nextpage"
+      @current-change="changepage"
+      layout="prev, pager, next"
+      :total="pagehelper.total"
+      :page-size="pagehelper.pageSize"
+      :current-page.sync="pagehelper.currentPage"
+      >
+    </el-pagination>
   </div>
 
   <!-- 课题列表 -->
@@ -143,38 +159,28 @@
       </el-table-column>
       <el-table-column
         label="所属学院"
-        prop="thesisDate"
+        prop="thesisCollege"
        >
       </el-table-column>
       <el-table-column 
             label="操作">
           <template slot-scope="scope">
-            <el-button size="mini"  @click="editThesis(scope.row.thesisId)">
-              编辑
-            </el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="delThesis(scope.row.thesisId)">
-              删除
+            <el-button size="mini" type="primary" plain @click="editThesis(scope.row.thesisId)">
+              选题
             </el-button>
         </template>
       </el-table-column>
     </el-table>
   </div>
 
-<!-- 分页 -->
-  <div class="block el-page">
-    <el-pagination
-      layout="prev, pager, next"
-      :total="100">
-    </el-pagination>
-  </div>
+
 
   </div>
 </template>
 
 <script>
+
+  import { getAllThesis, getCountThesis, getThesis } from "network/stuRequest";
   export default {
     name: 'Select',
     data () {
@@ -187,14 +193,68 @@
           // Status: '确认通过',
           // Edit: '查看详情'
         }],
-        formInline: {
-          user: '',
-          region: ''
+        selectCondition: {
+          sisName: '',
+          sisTeacher: '',
+          sisCollege:''
+        },
+        thesisData: null,
+        pagehelper: {
+          count: 0,
+          total: 0,
+          pageSize: 5,
+          currentPage:1
         }
+
       }
     },
+    created(){
+      // getAllThesis(this.pagehelper.currentPage,this.pagehelper.pageSize).then(res=>{
+      //   this.thesisData = res.data.data;
+      //   // console.log(this.thesisData);
+      // }),
+      getThesis(this.selectCondition.sisName, this.selectCondition.sisTeacher, 
+                this.selectCondition.sisCollege, this.pagehelper.currentPage)
+        .then(res => {
+          console.log(res);
+          this.thesisData = res.data.data.list;
+        })
+      getCountThesis().then(res=>{
+        this.pagehelper.total = res.data.data;
+        })
+    },
     methods: {
-     
+      selectByCondition(){
+        this.pagehelper.currentPage = 1;
+        getThesis(this.selectCondition.sisName, this.selectCondition.sisTeacher, 
+                  this.selectCondition.sisCollege, this.pagehelper.currentPage)
+          .then(res => {
+            this.thesisData = res.data.data.list;
+            this.pagehelper.total = res.data.data.count;
+            console.log(this.thesisData);
+          })
+      },
+      nextpage(){
+        getThesis(this.selectCondition.sisName, this.selectCondition.sisTeacher, 
+                  this.selectCondition.sisCollege, ++this.pagehelper.currentPage)
+          .then(res => {
+            this.thesisData = res.data.data.list;
+          })
+      },
+      prevpage(){
+        getThesis(this.selectCondition.sisName, this.selectCondition.sisTeacher, 
+                  this.selectCondition.sisCollege, --this.pagehelper.currentPage)
+          .then(res => {
+            this.thesisData = res.data.data.list;
+          })
+      },
+      changepage(){
+        getThesis(this.selectCondition.sisName, this.selectCondition.sisTeacher, 
+                  this.selectCondition.sisCollege, this.pagehelper.currentPage)
+          .then(res => {
+            this.thesisData = res.data.data.list;
+          })
+      }
     },
  
     components: {
@@ -244,13 +304,33 @@
   }
 
   .sel-table{
+    height: 600px;
     margin-left: 250px;
   }
 
   .el-page{
-    margin-top: 30px;
+    margin-top: -10px;
+    margin-left: 240px;
+    margin-bottom: 20px;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
+  }
+
+   .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+
+  .downloadUrl{
+    color: #409EFF;
   }
 </style>
