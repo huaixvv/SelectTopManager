@@ -48,4 +48,49 @@ export function getThesis(sisName, sisTeacher, sisCollege, pageNum, pageSize=5) 
   })
 }
 
+//申请课题
+export function applyThesis(thesisVo) {
+  return studentRequest({
+    url: '/student/applyThesis',
+    method:'post',
+    params: {
+      thesisVo,
+      
+    }
+  })
+}
 
+
+//获取学生ge人信息
+export function getStudent(studentId) {
+  return studentRequest({
+    url: '/student/getinfo',
+    method:'get',
+    params: {
+      studentId,
+    }
+  })
+}
+
+//修改个人信息
+export function editInfo(student) {
+  return studentRequest({
+    url: '/student/editinfo',
+    method:'post',
+    params: {
+      student,
+    }
+  })
+}
+
+//选题
+export function chooseThesis(thesis, studentId) {
+  return studentRequest({
+    url: '/student/choose',
+    method: 'post',
+    params: {
+      thesis,
+      studentId
+    }
+  })
+}

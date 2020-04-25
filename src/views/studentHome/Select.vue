@@ -165,7 +165,7 @@
       <el-table-column 
             label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" plain @click="editThesis(scope.row.thesisId)">
+            <el-button size="mini" type="primary" plain @click="choose(scope.row)">
               选题
             </el-button>
         </template>
@@ -180,7 +180,7 @@
 
 <script>
 
-  import { getAllThesis, getCountThesis, getThesis } from "network/stuRequest";
+  import { getAllThesis, getCountThesis, getThesis, chooseThesis } from "network/stuRequest";
   export default {
     name: 'Select',
     data () {
@@ -254,6 +254,24 @@
           .then(res => {
             this.thesisData = res.data.data.list;
           })
+      },
+      choose(thesis){
+        const studentId = window.sessionStorage.getItem("student");
+        chooseThesis(thesis, studentId).then(res=>{
+          console.log(res);
+            if(res.data.code == 0) {
+                this.$message({
+                  message: '选择课题成功！',
+                  type: 'success'
+                });
+              }
+            if(res.data.code == 6000){
+                this.$message({
+                  message: '选题失败！请确认您是否已经选择课题！',
+                  type: 'error'
+                });
+              }
+        })
       }
     },
  

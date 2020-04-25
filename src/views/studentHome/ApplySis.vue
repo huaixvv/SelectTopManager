@@ -7,8 +7,8 @@
        <el-form-item label="课题名称" prop="thesisName">
         <el-input v-model="thesisData.thesisName" placeholder="请输入课题名称"></el-input>
       </el-form-item>
-       <el-form-item label="指导教师" prop="thesisName">
-        <el-input v-model="thesisData.thesisName" placeholder="请输入指导教师名称"></el-input>
+       <el-form-item label="指导教师" prop="teacher">
+        <el-input v-model="thesisData.teacher" placeholder="请输入指导教师名称"></el-input>
       </el-form-item>
       <el-form-item label="所属学院" prop="thesisCollege">
         <el-select v-model="thesisData.thesisCollege" placeholder="请选择所属学院">
@@ -35,6 +35,13 @@
           <el-radio label="生产/社会实践"></el-radio>
           <el-radio label="教师科研课题"></el-radio>
           <el-radio label="其他"></el-radio>
+        </el-radio-group>
+      </el-form-item>
+
+      <el-form-item label="选题模式" prop="model">
+        <el-radio-group v-model="thesisData.model">
+          <el-radio label="师生双选"></el-radio>
+          <el-radio label="学生自拟"></el-radio>
         </el-radio-group>
       </el-form-item>
 
@@ -71,7 +78,7 @@
 
 <script>
   import { delFile } from "network/fileRequest";
-  import { addThesis } from "network/teaRequest";
+  import { applyThesis } from "network/stuRequest";
   export default {
     name: 'ApplySis',
     data() {
@@ -85,13 +92,17 @@
           thesisFrom: '',
           classroom: '',
           allowSpecial: '',
-          model: '师生互选课题',
+          model: '',
           thesisDesc: '',
-          filePath: ''
+          filePath: '',
+          student: ''
         },
         rules: {
           thesisName: [
             { required: true, message: '请输入课题名称', trigger: 'blur' },
+          ],
+          teacher: [
+            { required: true, message: '请输入指导教师姓名', trigger: 'blur' },
           ],
           thesisCollege: [
             { required: true, message: '请选择所属学院', trigger: 'change' }
@@ -105,6 +116,9 @@
           thesisFrom: [
             { required: true, message: '请选择题目来源', trigger: 'change' }
           ],
+          model: [
+            { required: true, message: '请选择选题模式', trigger: 'change' }
+          ],
           thesisDesc: [
             { required: true, message: '课题简述不能为空', trigger: 'blur' }
           ]
@@ -115,17 +129,19 @@
        submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.thesisData.teacher = window.sessionStorage.getItem("teacherName")
-            addThesis(JSON.stringify(this.thesisData)).then(res => {
+            console.log(this.thesisData);
+
+            this.thesisData.student = window.sessionStorage.getItem("studentName");
+            applyThesis(JSON.stringify(this.thesisData)).then(res => {
               console.log(res);
               if(res.data.data.code == 2000) {
                 this.$message({
                   message: '申报课题成功！',
                   type: 'success'
                 });
-                setTimeout(() => {
-                 this.$router.replace('/teacher/alltopic');
-                }, 1000);
+                // setTimeout(() => {
+                //  this.$router.replace('/teacher/alltopic');
+                // }, 1000);
               }else{
                 this.$message({
                   message: '课题修改失败，请重试！',

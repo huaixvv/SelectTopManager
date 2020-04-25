@@ -99,7 +99,8 @@
           allowSpecial: '',
           model: '师生互选课题',
           thesisDesc: '',
-          filePath: ''
+          filePath: '',
+          student: null
         },
         rules: {
           thesisName: [

@@ -86,7 +86,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('teacherInfo')">提交</el-button>
-          <el-button @click="resetForm('teacherInfo')">重置</el-button>
+          <el-button @click="resetForm()">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -174,8 +174,13 @@
           }
         });
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
+      resetForm() {
+        this.teacherInfo.college = '';
+        this.teacherInfo.teacherPost = '';
+        this.teacherInfo.email = '';
+        this.teacherInfo.phone = '';
+        this.teacherInfo.sex = '';
+        this.teacherInfo.teacherPwd = '';
       }
     },
     components: {

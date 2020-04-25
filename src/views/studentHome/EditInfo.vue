@@ -3,41 +3,45 @@
   <div class="fromtitle el-icon-caret-right"> &nbsp;请填写/更改个人信息：</div>
     <div class="editfrom">
 
-      <el-form :model="teacherInfo" 
+      <el-form :model="studentInfo" 
                 status-icon 
-                ref="teacherInfo"
+                ref="studentInfo"
                 label-width="100px" 
                 class="demo-teacherInfo" 
                 label-position=left
                 :rules="rules">
         <el-form-item label="登录账户" prop="loginName" >
-          <el-input  v-model="teacherInfo.loginName" disabled></el-input>
+          <el-input  v-model="studentInfo.loginName" disabled></el-input>
         </el-form-item>
-          <el-form-item label="学生姓名" prop="teacherName" >
-          <el-input  v-model="teacherInfo.teacherName" disabled></el-input>
+          <el-form-item label="学生姓名" prop="studentName" >
+          <el-input  v-model="studentInfo.studentName" disabled></el-input>
         </el-form-item>
-        <el-form-item label="学院" prop="teacherPost">  
-          <el-input v-model="teacherInfo.teacherPost" disabled=""></el-input>
+        <el-form-item label="学院" prop="college">  
+          <el-input v-model="studentInfo.college" disabled></el-input>
         </el-form-item>
 
-        <el-form-item label="班级" prop="teacherPost">
-          <el-input v-model="teacherInfo.teacherPost" disabled=""></el-input>
+        <el-form-item label="专业" prop="speciality">
+          <el-input v-model="studentInfo.speciality" disabled></el-input>
+        </el-form-item>
+
+        <el-form-item label="班级" prop="classNumber">
+          <el-input v-model="studentInfo.classNumber" disabled></el-input>
         </el-form-item>
 
 
         <el-form-item label="联系电话" prop="phone">
-          <el-input v-model="teacherInfo.phone"></el-input>
+          <el-input v-model="studentInfo.phone"></el-input>
         </el-form-item>
         <el-form-item label="邮箱地址" prop="email">
-          <el-input v-model="teacherInfo.email" type="email"></el-input>
+          <el-input v-model="studentInfo.email" type="email"></el-input>
         </el-form-item>
 
-        <el-form-item label="登录密码" prop="teacherPwd">
-          <el-input v-model="teacherInfo.teacherPwd" show-password></el-input>
+        <el-form-item label="登录密码" prop="studentPwd">
+          <el-input v-model="studentInfo.studentPwd" show-password></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('teacherInfo')">提交</el-button>
-          <el-button @click="resetForm('teacherInfo')">重置</el-button>
+          <el-button type="primary" @click="submitForm('studentInfo')">提交</el-button>
+          <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -46,34 +50,29 @@
 </template>
 
 <script>
-  import { editinfo, getTeacher } from "network/teaRequest";
+  import { editInfo, getStudent } from "network/stuRequest";
 
   export default {
-    name: 'TeacherInfo',
+    name: 'EditInfo',
       data() {
       return {
-        teacherInfo: {
-          teacherId: '',
+        studentInfo: {
+          studentId: '',
           loginName:'',
-          teacherName: '',
+          studentPwd:'',
+          studentName: '',
           college: '',
-          teacherPost: '',
-          email: '',
+          speciality:'',  //专业
+          classNumber:'', //班级
           phone: '',
-          sex: '',
-          teacherPwd:''
+          email: '',
+          sex:'',
         },
         rules: {
-          college: [
-            { required: true, message: '请选择所属学院', trigger: 'change' }
-          ],
-          sex: [
-            { required: true, message: '请选择性别', trigger: 'change' }
-          ],
           phone: [
             { required: true, message: '联系电话不能为空', trigger: 'change' }
           ],
-          teacherPwd: [
+          studentPwd: [
             { required: true, message: '登录密码不能为空', trigger: 'change' }
           ],
           email: [
@@ -84,18 +83,20 @@
       };
     },
     created(){
-      let teacherId = window.sessionStorage.getItem('teacher')
-      getTeacher(teacherId).then(res => {
+      let studentId = window.sessionStorage.getItem('student')
+      getStudent(studentId).then(res => {
         let info = res.data.data;
-        this.teacherInfo.loginName = info.loginName;
-        this.teacherInfo.teacherId = teacherId;
-        this.teacherInfo.teacherName = info.teacherName;
-        this.teacherInfo.college = info.college;
-        this.teacherInfo.teacherPost = info.teacherPost;
-        this.teacherInfo.email = info.email;
-        this.teacherInfo.phone = info.phone;
-        this.teacherInfo.sex = info.sex;
-        this.teacherInfo.teacherPwd = info.teacherPwd;
+        console.log(info);
+        this.studentInfo.loginName = info.loginName;
+        this.studentInfo.studentId = studentId;
+        this.studentInfo.studentName = info.studentName;
+        this.studentInfo.college = info.college;
+        this.studentInfo.speciality = info.speciality;
+        this.studentInfo.classNumber = info.classNumber;
+        this.studentInfo.email = info.email;
+        this.studentInfo.phone = info.phone;
+        this.studentInfo.studentPwd = info.studentPwd;
+        this.studentInfo.sex = info.sex;
       })
       
     },
@@ -105,7 +106,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // console.log(this.teacherInfo);
-            editinfo(this.teacherInfo).then(res => {
+            editInfo(this.studentInfo).then(res => {
               console.log(res);
               if (res.data.data.code == 2000) {
                 this.$message({
@@ -125,8 +126,10 @@
           }
         });
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
+      resetForm() {
+        this.studentInfo.email = '';
+        this.studentInfo.phone = '';
+        this.studentInfo.studentPwd = '';
       }
     },
     components: {

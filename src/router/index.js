@@ -9,7 +9,7 @@ const EditThesis = () => import('views/teacherHome/EditThesis')
 const TeacherInfo = () => import('views/teacherHome/TeacherInfo')
 
 const StudentHome = () => import('views/studentHome/StudentHome')
-const Info = () => import('views/studentHome/Info')
+const Home = () => import('views/studentHome/Home')
 const Select = () => import('views/studentHome/Select')
 const ApplySis = () => import('views/studentHome/ApplySis')
 const Analyse = () => import('views/studentHome/Analyse')
@@ -59,8 +59,8 @@ const routes = [
     component: StudentHome,
     children: [
       {
-        path: '/student/info',
-        component: Info
+        path: '/student/home',
+        component: Home
       },
       {
         path: '/student/select',
