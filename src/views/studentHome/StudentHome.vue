@@ -2,7 +2,7 @@
   <div>
     <StudentNav></StudentNav>
     <SMenu></SMenu>
-    <router-view></router-view>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
@@ -14,7 +14,20 @@
     name: 'TeacherHome',
     data () {
       return {
-        
+        isRouterAlive: true
+      }
+    },
+    provide(){
+      return{
+        reload: this.reload
+      }
+    },
+    methods:{
+      reload(){
+        this.isRouterAlive = false;
+        this.$nextTick( () => {
+          this.isRouterAlive = true;
+        })
       }
     },
     created(){

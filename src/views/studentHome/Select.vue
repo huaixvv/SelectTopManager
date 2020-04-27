@@ -9,13 +9,13 @@
     <div class="title-s el-icon-caret-right"> &nbsp;已选择题目：</div>
     
     <el-table
-    :data="tableData"
+    :data="choosedThesis"
     style="width: 77%; margin-left:250px"
     border
     empty-text="暂未选题"
     >
     <el-table-column
-      prop="name"
+      prop="thesisName"
       label="题目"
       width="350">
     </el-table-column>
@@ -35,11 +35,11 @@
       width="120">
     </el-table-column>
     <el-table-column
-      prop="Status"
+      prop="status"
       label="确认状态"
       width="120">
       <template>
-         <p style="color: #0b8902">状态通过</p>
+         <p :class="{pending:isPending, sucess:isSucess, reject: isReject}">{{choosedThesis[0].status}}</p>
       </template>
     </el-table-column>
     <el-table-column
@@ -180,18 +180,18 @@
 
 <script>
 
-  import { getAllThesis, getCountThesis, getThesis, chooseThesis } from "network/stuRequest";
+  import { getAllThesis, getCountThesis, getThesis, chooseThesis, chooesdThesis } from "network/stuRequest";
   export default {
     name: 'Select',
+    inject: ['reload'],
     data () {
       return {
-        tableData: [{
-          name: '基于微信小程序的学习打卡系统的设计与实现',
-          thesisType: '工程工业设计',
-          thesisFrom: '生产/社会实践',
-          teacher: '李建',
-          // Status: '确认通过',
-          // Edit: '查看详情'
+        choosedThesis: [{
+          thesisName:'',
+          thesisType:'',
+          thesisFrom:'',
+          teacher:'',
+          status:''
         }],
         selectCondition: {
           sisName: '',
@@ -204,8 +204,10 @@
           total: 0,
           pageSize: 5,
           currentPage:1
-        }
-
+        },
+        isPending: false,
+        isSucess: false,
+        isReject: false
       }
     },
     created(){
@@ -213,12 +215,32 @@
       //   this.thesisData = res.data.data;
       //   // console.log(this.thesisData);
       // }),
+      const studentId = window.sessionStorage.getItem("student");
+      chooesdThesis(studentId).then(res=>{
+        this.choosedThesis[0].thesisFrom = res.data.data.thesisFrom;
+        this.choosedThesis[0].thesisType = res.data.data.thesisType;
+        this.choosedThesis[0].thesisName = res.data.data.thesisName;
+        this.choosedThesis[0].teacher = res.data.data.teacher;
+        this.choosedThesis[0].status = res.data.data.status;
+        switch (this.choosedThesis[0].status) {
+          case "待审核":
+            this.isPending = true;
+            break;
+          case "确认通过":
+            this.isSucess = true;
+            break;
+          case "未通过":
+            this.isReject = true;
+            break;
+        }
+        console.log(this.choosedThesis);
+      }),
       getThesis(this.selectCondition.sisName, this.selectCondition.sisTeacher, 
                 this.selectCondition.sisCollege, this.pagehelper.currentPage)
         .then(res => {
           console.log(res);
           this.thesisData = res.data.data.list;
-        })
+        }),
       getCountThesis().then(res=>{
         this.pagehelper.total = res.data.data;
         })
@@ -264,23 +286,37 @@
                   message: '选择课题成功！',
                   type: 'success'
                 });
+              this.reload();
               }
             if(res.data.code == 6000){
                 this.$message({
-                  message: '选题失败！请确认您是否已经选择课题！',
+                  message: '选题失败！请确认您是否已经选择过课题！',
                   type: 'error'
                 });
               }
         })
       }
     },
- 
+  
     components: {
     }
   }
 </script>
 
 <style scoped>
+
+  .pending{
+    color: #E6A23C;
+  }
+
+  .sucess{
+    color: #67C23A;
+  }
+
+  .reject{
+    color: #F56C6C;
+  }
+
   .notic-msg{
     margin-top: 30px;
     margin-left: 250px;

@@ -49,13 +49,13 @@ export function getThesis(sisName, sisTeacher, sisCollege, pageNum, pageSize=5) 
 }
 
 //申请课题
-export function applyThesis(thesisVo) {
+export function applyThesis(thesisVo, studentId) {
   return studentRequest({
     url: '/student/applyThesis',
     method:'post',
     params: {
       thesisVo,
-      
+      studentId
     }
   })
 }
@@ -90,6 +90,17 @@ export function chooseThesis(thesis, studentId) {
     method: 'post',
     params: {
       thesis,
+      studentId
+    }
+  })
+}
+
+//获取学生选择的课题信息
+export function chooesdThesis(studentId) {
+  return studentRequest({
+    url: '/student/choosedthesis',
+    method: 'get',
+    params: {
       studentId
     }
   })

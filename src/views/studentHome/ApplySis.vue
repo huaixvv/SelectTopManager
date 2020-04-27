@@ -33,14 +33,14 @@
       <el-form-item label="题目来源" prop="thesisFrom">
         <el-radio-group v-model="thesisData.thesisFrom">
           <el-radio label="生产/社会实践"></el-radio>
-          <el-radio label="教师科研课题"></el-radio>
+          <el-radio label="教学科研课题"></el-radio>
           <el-radio label="其他"></el-radio>
         </el-radio-group>
       </el-form-item>
 
       <el-form-item label="选题模式" prop="model">
         <el-radio-group v-model="thesisData.model">
-          <el-radio label="师生双选"></el-radio>
+          <el-radio label="师生双选" disabled=""></el-radio>
           <el-radio label="学生自拟"></el-radio>
         </el-radio-group>
       </el-form-item>
@@ -125,16 +125,19 @@
         }
       };
     },
+    created(){
+
+    },
     methods: {
        submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             console.log(this.thesisData);
-
             this.thesisData.student = window.sessionStorage.getItem("studentName");
-            applyThesis(JSON.stringify(this.thesisData)).then(res => {
+            const studentId = window.sessionStorage.getItem("student")
+            applyThesis(JSON.stringify(this.thesisData), studentId).then(res => {
               console.log(res);
-              if(res.data.data.code == 2000) {
+              if(res.data.data == 0) {
                 this.$message({
                   message: '申报课题成功！',
                   type: 'success'
@@ -142,7 +145,8 @@
                 // setTimeout(() => {
                 //  this.$router.replace('/teacher/alltopic');
                 // }, 1000);
-              }else{
+              }
+              if(res.data.code == 5000){
                 this.$message({
                   message: '课题修改失败，请重试！',
                   type: 'error'
