@@ -137,20 +137,17 @@
             const studentId = window.sessionStorage.getItem("student")
             applyThesis(JSON.stringify(this.thesisData), studentId).then(res => {
               console.log(res);
-              if(res.data.data == 0) {
-                this.$message({
-                  message: '申报课题成功！',
+              if(res.data.code == 0) {
+                this.$confirm('申报课题成功！', '提示', {
+                  confirmButtonText: '确定',
                   type: 'success'
-                });
-                // setTimeout(() => {
-                //  this.$router.replace('/teacher/alltopic');
-                // }, 1000);
+                })
               }
               if(res.data.code == 5000){
-                this.$message({
-                  message: '课题修改失败，请重试！',
+                this.$alert('申报失败！您已经选择过课题，请耐心等待教师审核！', '提示', {
+                  confirmButtonText: '确定',
                   type: 'error'
-                });
+                })
               }
             });
 

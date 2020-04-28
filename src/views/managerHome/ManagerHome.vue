@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- <top-nav :userInfo="teacherInfo" ></top-nav> -->
-    <teacher-nav></teacher-nav>
+    <manager-nav></manager-nav>
     <Menu></Menu>
     <router-view v-if="isRouterAlive"/> 
   </div>
@@ -9,13 +9,11 @@
 
 <script>
   import { getTeacher } from "network/teaRequest";
-  import TopNav from 'components/topNav/TopNav';
-  import TeacherNav from './TeacherNav';
+  import ManagerNav from './ManagerNav';
   import Menu from './Menu';
-  import TopicTable from './TopicTable'
 
   export default {
-    name: 'TeacherHome',
+    name: 'ManagerHome',
     data () {
       return {
         isRouterAlive: true
@@ -38,10 +36,8 @@
       }
     },
     components: {
-      TopNav,
       Menu,
-      TopicTable,
-      TeacherNav
+      ManagerNav
     }
   }
   

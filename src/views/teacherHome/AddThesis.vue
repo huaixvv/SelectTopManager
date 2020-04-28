@@ -132,18 +132,18 @@
             addThesis(JSON.stringify(this.thesisData)).then(res => {
               console.log(res);
               if(res.data.data.code == 2000) {
-                this.$message({
-                  message: '申报课题成功！',
-                  type: 'success'
-                });
-                setTimeout(() => {
-                 this.$router.replace('/teacher/alltopic');
-                }, 1000);
+                this.$alert('添加课题成功！', '提示', {
+                                  confirmButtonText: '确定',
+                                  type: 'success'
+                                }).then(()=>{
+                                      this.$router.replace('/teacher/alltopic');
+                                });
+                
               }else{
-                this.$message({
-                  message: '课题修改失败，请重试！',
-                  type: 'error'
-                });
+                this.$alert('添加课题失败！请重试！', '提示', {
+                                  confirmButtonText: '确定',
+                                  type: 'error'
+                                })
               }
             });
 

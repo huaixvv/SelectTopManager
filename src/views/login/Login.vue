@@ -33,6 +33,7 @@
 
   import { getStudentByName } from "network/stuRequest";
   import { getTeacherByName } from "network/teaRequest";
+  import { login } from "network/manRequest";
   
   export default {
     name: 'Login',
@@ -50,7 +51,21 @@
       login(){
         switch (this.loginform.usertype) {
           case '管理员':
-            
+            login(this.loginform.username, this.loginform.password).then(res => {
+              console.log(res);
+              if(res.data.code== 0) {
+                window.sessionStorage.setItem("manager", res.data.data.managerId);
+                // window.sessionStorage.setItem("teacherName", res.data.data.teacherName);
+                this.$router.push('/manager/teacher-info')
+              }else{
+                 this.$message({
+                  message: res.data.msg,
+                  type: 'error',
+                  offset: 160,
+                  center: true
+                });
+              }
+            })
             break;
           case '学生':
             getStudentByName(this.loginform.username).then(res => {

@@ -278,22 +278,30 @@
           })
       },
       choose(thesis){
-        const studentId = window.sessionStorage.getItem("student");
-        chooseThesis(thesis, studentId).then(res=>{
-          console.log(res);
-            if(res.data.code == 0) {
-                this.$message({
-                  message: '选择课题成功！',
-                  type: 'success'
-                });
-              this.reload();
-              }
-            if(res.data.code == 6000){
-                this.$message({
-                  message: '选题失败！请确认您是否已经选择过课题！',
-                  type: 'error'
-                });
-              }
+        this.$confirm('您只能选择一个课题, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            const studentId = window.sessionStorage.getItem("student");
+            const studentName = window.sessionStorage.getItem("studentName");
+            chooseThesis(thesis, studentId, studentName).then(res=>{
+              // console.log(res);
+                if(res.data.code == 0) {
+                    this.$alert('选题成功！请等待指导教师审核！', '提示', {
+                      confirmButtonText: '确定',
+                      type: 'success'
+                    }).then(()=>{
+                       this.reload();
+                    })
+                  }
+                if(res.data.code == 6000){
+                  this.$alert('选题失败！请确认您是否已经选择过课题！', '提示', {
+                      confirmButtonText: '确定',
+                      type: 'error'
+                    })
+                  }
+            })
         })
       }
     },

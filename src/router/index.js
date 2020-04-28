@@ -7,6 +7,8 @@ const TopicTable = () => import('views/teacherHome/TopicTable')
 const AddThesis = () => import('views/teacherHome/AddThesis')
 const EditThesis = () => import('views/teacherHome/EditThesis')
 const TeacherInfo = () => import('views/teacherHome/TeacherInfo')
+const StudentApply = () => import('views/teacherHome/StudentApply')
+const MyStudent = () => import('views/teacherHome/MyStudent')
 
 const StudentHome = () => import('views/studentHome/StudentHome')
 const Home = () => import('views/studentHome/Home')
@@ -15,6 +17,10 @@ const ApplySis = () => import('views/studentHome/ApplySis')
 const Analyse = () => import('views/studentHome/Analyse')
 const EditInfo = () => import('views/studentHome/EditInfo')
 
+const ManagerHome = () => import('views/managerHome/ManagerHome')
+const Teacher = () => import('views/managerHome/TeacherInfo')
+const StudentInfo = () => import('views/managerHome/StudentInfo')
+const ManagerInfo = () => import('views/managerHome/ManagerInfo')
 Vue.use(VueRouter);
 
 const routes = [
@@ -49,7 +55,16 @@ const routes = [
         path: '/teacher/info',
         name: 'TeacherInfo',
         component: TeacherInfo,
-        
+      },
+      {
+        path: '/teacher/stu-apply',
+        name: 'StudentApply',
+        component: StudentApply,
+      },
+      {
+        path: '/teacher/my-student',
+        name: 'MyStudent',
+        component: MyStudent,
       }
     ]
   },
@@ -78,6 +93,25 @@ const routes = [
         path: '/student/editinfo',
         component: EditInfo
       }
+    ]
+  },
+  {
+    path: '/manager',
+    component: ManagerHome,
+    children: [
+      {
+        path: '/manager/teacher-info',
+        component: Teacher
+      },
+      {
+        path: '/manager/student-info',
+        component: StudentInfo
+      },
+      {
+        path: '/manager/manager-info',
+        component: ManagerInfo
+      },
+
     ]
   }
 ];

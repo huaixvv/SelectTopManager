@@ -49,13 +49,14 @@ export function getThesis(sisName, sisTeacher, sisCollege, pageNum, pageSize=5) 
 }
 
 //申请课题
-export function applyThesis(thesisVo, studentId) {
+export function applyThesis(thesisVo, studentId, studentName) {
   return studentRequest({
     url: '/student/applyThesis',
     method:'post',
     params: {
       thesisVo,
-      studentId
+      studentId,
+      studentName
     }
   })
 }
@@ -84,13 +85,14 @@ export function editInfo(student) {
 }
 
 //选题
-export function chooseThesis(thesis, studentId) {
+export function chooseThesis(thesis, studentId, studentName) {
   return studentRequest({
     url: '/student/choose',
     method: 'post',
     params: {
       thesis,
-      studentId
+      studentId,
+      studentName
     }
   })
 }

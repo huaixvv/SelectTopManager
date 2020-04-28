@@ -109,15 +109,16 @@
             editInfo(this.studentInfo).then(res => {
               console.log(res);
               if (res.data.data.code == 2000) {
-                this.$message({
-                  message: '个人信息修改成功！',
+
+                this.$alert('个人信息修改成功！', '提示', {
+                  confirmButtonText: '确定',
                   type: 'success'
-                });
+                })
               }else{
-                this.$message({
-                  message: '个人信息修改失败，请重试！',
+                this.$alert('个人信息修改失败！', '提示', {
+                  confirmButtonText: '确定',
                   type: 'error'
-                });
+                })
               }
             })
           } else {

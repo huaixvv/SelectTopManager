@@ -2,45 +2,6 @@
   <div class="fromcontain">
   <div class="fromtitle el-icon-caret-right"> &nbsp;请填写/更改个人信息：</div>
     <div class="editfrom">
-      <!-- <el-form 
-        :model="teacherInfo" 
-        status-icon :rules="rules" 
-        ref="teacherInfo" 
-        label-width="100px" 
-        class="demo-teacherInfo"
-        label-position=left>
-         <el-form-item label="登录账户" prop="loginName" >
-            <el-input  v-model="teacherInfo.loginName" ></el-input>
-          </el-form-item>
-           <el-form-item label="教师姓名" prop="teacherName" >
-            <el-input  v-model="teacherInfo.teacherName"></el-input>
-          </el-form-item>
-          <el-form-item label="所属学院" prop="college">
-            <el-input v-model="teacherInfo.college"></el-input>
-          </el-form-item>
-          <el-form-item label="联系电话" prop="phone">
-            <el-input v-model="teacherInfo.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="邮箱地址" prop="email">
-            <el-input v-model="teacherInfo.email"></el-input>
-          </el-form-item>
-          <el-form-item label="教师职务" prop="teacherPost">
-            <el-input v-model="teacherInfo.teacherPost"></el-input>
-          </el-form-item>
-
-           <el-form-item label="密码" prop="teacherPwd" >
-            <el-input type="password" v-model="teacherInfo.teacherPwd" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="确认密码" prop="checkPwd">
-            <el-input type="password" v-model="teacherInfo.checkPwd" autocomplete="off"></el-input>
-          </el-form-item>
-        
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('teacherInfo')">提交</el-button>
-            <el-button @click="resetForm('teacherInfo')">重置</el-button>
-          </el-form-item>
-      </el-form> -->
-
       <el-form :model="teacherInfo" 
                 status-icon 
                 ref="teacherInfo"
@@ -54,16 +15,18 @@
           <el-form-item label="教师姓名" prop="teacherName" >
           <el-input  v-model="teacherInfo.teacherName" disabled></el-input>
         </el-form-item>
-
+        <el-form-item label="教师职务" prop="teacherPost">
+          <el-input v-model="teacherInfo.teacherPost" disabled></el-input>
+        </el-form-item>
         <el-form-item label="性别" prop="sex">
-          <el-select v-model="teacherInfo.sex" placeholder="请选择性别">
+          <el-select v-model="teacherInfo.sex" placeholder="请选择性别" disabled="">
             <el-option label="男" value="男"></el-option>
             <el-option label="女" value="女"></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item label="所属学院" prop="college">
-          <el-select v-model="teacherInfo.college" placeholder="请选择所属学院">
+          <el-select v-model="teacherInfo.college" placeholder="请选择所属学院" disabled>
             <el-option label="计算机与电气工程学院" value="计算机与电气工程学院"></el-option>
             <el-option label="文史与法学学院" value="文史与法学学院"></el-option>
             <el-option label="外国语学院" value="外国语学院"></el-option>
@@ -78,9 +41,7 @@
         <el-form-item label="邮箱地址" prop="email">
           <el-input v-model="teacherInfo.email" type="email"></el-input>
         </el-form-item>
-        <el-form-item label="教师职务" prop="teacherPost">
-          <el-input v-model="teacherInfo.teacherPost"></el-input>
-        </el-form-item>
+        
         <el-form-item label="登录密码" prop="teacherPwd">
           <el-input v-model="teacherInfo.teacherPwd" show-password></el-input>
         </el-form-item>
@@ -157,15 +118,15 @@
             editinfo(this.teacherInfo).then(res => {
               console.log(res);
               if (res.data.data.code == 2000) {
-                this.$message({
-                  message: '个人信息修改成功！',
+                this.$alert('个人信息修改成功！', '提示', {
+                  confirmButtonText: '确定',
                   type: 'success'
-                });
+                })
               }else{
-                this.$message({
-                  message: '个人信息修改失败，请重试！',
+                this.$alert('个人信息修改失败！', '提示', {
+                  confirmButtonText: '确定',
                   type: 'error'
-                });
+                })
               }
             })
           } else {
@@ -175,11 +136,8 @@
         });
       },
       resetForm() {
-        this.teacherInfo.college = '';
-        this.teacherInfo.teacherPost = '';
         this.teacherInfo.email = '';
         this.teacherInfo.phone = '';
-        this.teacherInfo.sex = '';
         this.teacherInfo.teacherPwd = '';
       }
     },

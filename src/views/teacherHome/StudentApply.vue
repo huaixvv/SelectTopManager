@@ -1,9 +1,9 @@
 <template>
   <div>
-    <p class="el-icon-caret-right">&nbsp;已发布题目列表：</p>
+    <p class="el-icon-caret-right">&nbsp;学生申报课题列表：</p>
       <el-table
       style="width: 80%"
-      :data="thesisData"
+      :data="orderInfo"
       :highlight-current-row ='true'>
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -20,14 +20,14 @@
             <el-form-item label="题目来源:">
               <span>{{ props.row.thesisFrom }}</span>
             </el-form-item>
-            <el-form-item label="指导教师:">
+            <el-form-item label="课题教师:">
               <span>{{ props.row.teacher }}</span>
             </el-form-item>
             <el-form-item label="教研室:">
               <span>{{ props.row.classroom }}</span>
             </el-form-item>
-            <el-form-item label="申报日期:">
-              <span>{{ props.row.thesisDate }}</span>
+            <el-form-item label="申请日期:">
+              <span>{{ props.row.createTime }}</span>
             </el-form-item>
             <el-form-item label="选择模式:">
               <span>{{ props.row.model }}</span>
@@ -46,7 +46,7 @@
       </el-table-column>
       <el-table-column
         label="编号"
-        prop="thesisId"
+        type="index"
         width = 130
        >
       </el-table-column>
@@ -57,27 +57,40 @@
         >
       </el-table-column>
       <el-table-column
-        label="指导教师"
-        prop="teacher"
+        label="申请学生"
+        prop="student"
         width = 140
         >
       </el-table-column>
       <el-table-column
-        label="申报时间"
-        prop="thesisDate"
+        label="申请状态"
        >
+       <template slot-scope="st">
+         <span 
+          :class="{pending:st.row.status=='待审核', 
+                   sucess:st.row.status=='确认通过', 
+                   reject:st.row.status=='未通过' }"
+          >
+         {{st.row.status}}
+         </span>
+       </template>
       </el-table-column>
       <el-table-column 
             label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="editThesis(scope.row.thesisId)">
-              编辑
+            <el-button 
+              size="mini" 
+              type="success" 
+              :disabled="scope.row.status=='确认通过' || scope.row.status=='未通过'" 
+              @click="confirm(scope.row)">
+              通过
             </el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="delThesis(scope.row.thesisId, scope.row.thesisName)">
-              删除
+              :disabled="scope.row.status=='未通过' ||  scope.row.status=='确认通过'"
+              @click="refuse(scope.row)">
+              拒绝
             </el-button>
         </template>
       </el-table-column>
@@ -85,62 +98,60 @@
   </div>
 </template>
 
-<script>
- import { getThesisByTeacherName, delThesisById, getTeacher } from "network/teaRequest";
 
+<script>
+  import { getOrder, confirmThesis, refuseThesis } from "network/teaRequest";
   export default {
-    data() {
+    name: 'StudentApply',
+    inject: ['reload'],
+    data () {
       return {
-        thesisData: null,
-        teacher: null
+        orderInfo: null,
       }
     },
     created(){
-      let teacherId = window.sessionStorage.getItem('teacher');
-      getTeacher(teacherId).then(res => {
-        this.teacher = res.data.data
-        console.log(this.teacher);
-        getThesisByTeacherName(this.teacher.teacherName).then(res=>{
-                        this.thesisData = res.data.data;
-                        console.log(this.thesisData);
-                      })
-      })      
-    },
-    computed:{
-      // teacher(){
-      //   return JSON.parse(window.sessionStorage.getItem("teacher"))
-      // }
+      let teacherName = window.sessionStorage.getItem("teacherName")
+      getOrder(teacherName).then(res => {
+        this.orderInfo = res.data.data;
+        // console.log(res);
+      })
     },
     methods:{
-      //删除课题
-      delThesis(thesisId, thesisName){
-        this.$confirm('此操作将永久删除该课题, 是否继续?', '提示', {
+      confirm(order){
+         this.$confirm('确认学生选题后不可再次修改, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-            delThesisById(thesisId, thesisName).then(res=>{  
-              if (res.data.code==5000) {
-                this.$alert('此课题已经被学生选择！不能进行删除！', '提示', {
-                  confirmButtonText: '确定',
-                  type: 'error'
-                });
-              }else{
-                getThesisByTeacherName(this.teacher.teacherName).then(res=>{
-                  this.thesisData = res.data.data;
-                })
-                this.$alert('删除课题成功！', '提示', {
-                  confirmButtonText: '确定',
-                  type: 'success'
-                });
-              }
-              }) 
-        }).catch(() => {});
+          confirmThesis(order).then(res=>{
+            this.reload();
+          })
+          this.$message({
+            offset:200,
+            type: 'success',
+            message: '已通过该生的选题!'
+          });
+        });
       },
-      
-      editThesis(thesisId){
-        this.$router.push(`/teacher/edit/${thesisId}`);
+      refuse(order){
+        this.$confirm('拒绝学生选题后不可再次修改, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          refuseThesis(order).then(res=>{
+            this.reload();
+          })
+          this.$message({
+            offset:200,
+            type: 'success',
+            message: '已拒绝该生的选题!'
+          });
+        });
+        
       }
+    },
+    components: {
     }
   }
 </script>
@@ -167,5 +178,16 @@
 
   .downloadUrl{
     color: #409EFF;
+  }
+  .pending{
+    color: #E6A23C;
+  }
+
+  .sucess{
+    color: #67C23A;
+  }
+
+  .reject{
+    color: #F56C6C;
   }
 </style>

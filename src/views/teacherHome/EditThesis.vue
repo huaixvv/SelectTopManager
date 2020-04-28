@@ -162,18 +162,17 @@
           if (valid) {
             editThesis(JSON.stringify(this.thesisData), this.thesisData.thesisId).then(res => {
               if(res.data.data.code == 2000) {
-                this.$message({
-                  message: '课题修改成功！',
-                  type: 'success'
-                });
-                setTimeout(() => {
-                 this.$router.replace('/teacher/alltopic');
-                }, 1000);
+                this.$alert('修改成功！', '提示', {
+                                  confirmButtonText: '确定',
+                                  type: 'success'
+                                }).then(()=>{
+                                      this.$router.replace('/teacher/alltopic');
+                                });
               }else{
-                this.$message({
-                  message: '课题修改失败，请重试！',
-                  type: 'error'
-                });
+                this.$alert('修改失败，请重试', '提示', {
+                                  confirmButtonText: '确定',
+                                  type: 'error'
+                                });
               }
             });
           } else {

@@ -10,25 +10,17 @@
       active-text-color="#409EFF">
       <el-menu-item>
         <i class="el-icon-user-solid"></i>
-        <span class="titlename">教师端</span>
+        <span class="titlename">管理员</span>
       </el-menu-item>
-      <el-menu-item index="1" @click="alltopic">
+      <el-menu-item index="1" @click="teacherInfo">
         <i class="el-icon-menu"></i>
-        <span slot="title">已有课题</span>
+        <span slot="title">教师管理</span>
       </el-menu-item>
-      <el-menu-item index="2" @click="applyThesis">
+      <el-menu-item index="2" @click="studentInfo">
         <i class="el-icon-menu"></i>
-        <span slot="title">课题申报</span>
+        <span slot="title">学生管理</span>
       </el-menu-item>
-      <el-menu-item index="3" @click="studentApply">
-        <i class="el-icon-menu"></i>
-        <span slot="title">学生申报</span>
-      </el-menu-item>
-      <el-menu-item index="4" @click="myStudent">
-        <i class="el-icon-document"></i>
-        <span slot="title">我的学生</span>
-      </el-menu-item>
-      <el-menu-item index="5" @click="teacherInfo">
+      <el-menu-item index="5" @click="managerInfo">
         <i class="el-icon-setting"></i>
         <span slot="title">信息修改</span>
       </el-menu-item>
@@ -46,7 +38,13 @@
     },
     methods: {
       teacherInfo(){
-        this.$router.push('/teacher/info')
+        this.$router.push('/manager/teacher-info')
+      },
+      studentInfo(){
+        this.$router.push('/manager/student-info')
+      },
+      managerInfo(){
+        this.$router.push('/manager/manager-info')
       },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
@@ -54,18 +52,6 @@
       handleClose(key, keyPath) {
         console.log(key, keyPath);
       },
-      alltopic(){
-        this.$router.push('/teacher/alltopic')
-      },
-      applyThesis(){
-        this.$router.push('/teacher/add')
-      },
-      studentApply(){
-        this.$router.push('/teacher/stu-apply')
-      },
-      myStudent(){
-        this.$router.push('/teacher/my-student')
-      }
     },
     components: {
     }

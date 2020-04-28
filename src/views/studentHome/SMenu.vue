@@ -52,7 +52,7 @@
         console.log(key, keyPath);
       },
       tohome(){
-        this.$router.push('info');
+        this.$router.push('home');
       },
       toselect(){
         this.$router.push('select');

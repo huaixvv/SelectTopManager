@@ -37,12 +37,13 @@ export function getThesisById(thesisId) {
 }
 
 //删除课题
-export function delThesisById(thesisId) {
+export function delThesisById(thesisId, thesisName) {
   return teacherRequest({
     url: '/teacher/delThesis',
     method:'get',
     params: {
       thesisId,
+      thesisName
     }
   })
 }
@@ -82,6 +83,28 @@ export function getTeacher(teacherId) {
   })
 }
 
+//获取教师个人信息
+export function teacherByName(teacherName) {
+  return teacherRequest({
+    url: '/teacher/teacherByName',
+    method:'get',
+    params: {
+      teacherName,
+    }
+  })
+}
+
+//获取学生申报课题信息
+export function getOrder(teacherName) {
+  return teacherRequest({
+    url: '/teacher/getorder',
+    method:'get',
+    params: {
+      teacherName,
+    }
+  })
+}
+
 //修改个人信息
 export function editinfo(teacher) {
   return teacherRequest({
@@ -92,3 +115,38 @@ export function editinfo(teacher) {
     }
   })
 }
+
+//确认选题
+export function confirmThesis(order) {
+  return teacherRequest({
+    url: '/teacher/confirm',
+    method:'post',
+    params: {
+      order,
+    }
+  })
+}
+
+//拒绝选题
+export function refuseThesis(order) {
+  return teacherRequest({
+    url: '/teacher/refuse',
+    method:'post',
+    params: {
+      order,
+    }
+  })
+}
+
+//获取名下学生
+export function getStudentOfTeacher(teacherName) {
+  return teacherRequest({
+    url: '/teacher/getstudent',
+    method:'get',
+    params: {
+      teacherName
+    }
+  })
+}
+
+
