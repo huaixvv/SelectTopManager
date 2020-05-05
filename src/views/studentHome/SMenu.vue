@@ -24,10 +24,6 @@
         <i class="el-icon-menu"></i>
         <span slot="title">学生选题</span>
       </el-menu-item>
-      <el-menu-item index="4" @click="toanalyse">
-        <i class="el-icon-document"></i>
-        <span slot="title">选题分析</span>
-      </el-menu-item>
       <el-menu-item index="5" @click="toeditinfo">
         <i class="el-icon-setting"></i>
         <span slot="title">信息修改</span>

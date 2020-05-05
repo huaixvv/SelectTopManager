@@ -2,11 +2,11 @@
   <div class="nav">
     <div class="left">
       <h1>湖南文理学院</h1>
-      <h2>大学生毕业设计（论文）管理系统</h2>
+      <h2>大学生毕业设计（论文）选题系统</h2>
     </div>
     <div class="right">
-      <div class="user">{{teacherInfo.teacherName}}({{teacherInfo.loginName}}),  欢迎使用系统!</div>
-      <div>学年：2020  /  角色：教师  /  学院：{{teacherInfo.college}}</div>
+      <div class="user">欢迎使用系统!</div>
+      <div>当前身份：系统管理员</div>
     </div>
   </div>
 </template>

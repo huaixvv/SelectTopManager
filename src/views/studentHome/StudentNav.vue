@@ -2,7 +2,7 @@
   <div class="nav">
     <div class="left">
       <h1>湖南文理学院</h1>
-      <h2>大学生毕业设计（论文）管理系统</h2>
+      <h2>大学生毕业设计（论文）选题系统</h2>
     </div>
     <div class="right">
       <div class="user">{{studentInfo.studentName}}({{studentInfo.loginName}}),  欢迎使用系统!</div>

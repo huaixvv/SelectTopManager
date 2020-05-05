@@ -20,6 +20,10 @@
         <i class="el-icon-menu"></i>
         <span slot="title">学生管理</span>
       </el-menu-item>
+       <el-menu-item index="3" @click="batchImport">
+        <i class="el-icon-menu"></i>
+        <span slot="title">批量导入 </span>
+      </el-menu-item>
       <el-menu-item index="5" @click="managerInfo">
         <i class="el-icon-setting"></i>
         <span slot="title">信息修改</span>
@@ -45,6 +49,9 @@
       },
       managerInfo(){
         this.$router.push('/manager/manager-info')
+      },
+      batchImport(){
+        this.$router.push('/manager/batch-import')
       },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);

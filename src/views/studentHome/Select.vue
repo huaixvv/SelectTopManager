@@ -214,7 +214,7 @@
       // getAllThesis(this.pagehelper.currentPage,this.pagehelper.pageSize).then(res=>{
       //   this.thesisData = res.data.data;
       //   // console.log(this.thesisData);
-      // }),
+      // })
       const studentId = window.sessionStorage.getItem("student");
       chooesdThesis(studentId).then(res=>{
         this.choosedThesis[0].thesisFrom = res.data.data.thesisFrom;
@@ -234,13 +234,13 @@
             break;
         }
         console.log(this.choosedThesis);
-      }),
+      });
       getThesis(this.selectCondition.sisName, this.selectCondition.sisTeacher, 
                 this.selectCondition.sisCollege, this.pagehelper.currentPage)
         .then(res => {
           console.log(res);
           this.thesisData = res.data.data.list;
-        }),
+        });
       getCountThesis().then(res=>{
         this.pagehelper.total = res.data.data;
         })

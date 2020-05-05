@@ -3,8 +3,26 @@
     <p class="el-icon-caret-right">&nbsp;学生列表：</p>
     <div class="add-btn">
       <el-button type="primary" size="small" icon="el-icon-plus" @click="addstudent">添加学生</el-button>
-      <el-button type="primary" size="small" icon="el-icon-folder-add">批量导入</el-button>
+      <!-- <el-button type="primary" size="small" icon="el-icon-folder-add">批量导入</el-button> -->
     </div>
+
+
+ <!-- 分页 -->
+    <div class="block el-page">
+      <el-pagination
+        background
+        small
+        @prev-click="prevpage"
+        @next-click="nextpage"
+        @current-change="changepage"
+        layout="prev, pager, next"
+        :total="pagehelper.total"
+        :page-size="pagehelper.pageSize"
+        :current-page.sync="pagehelper.currentPage"
+        >
+      </el-pagination>
+    </div>
+
     <el-table
       size="small"
       :data="studentList"
@@ -155,6 +173,12 @@
           studentName:'',
           studentPwd:'',
         },
+        pagehelper: {
+          count: 0,
+          total: 0,
+          pageSize: 5,
+          currentPage:1
+        },
         rules: {
           college: [
             { required: true, message: '请选择所属学院', trigger: 'change' }
@@ -188,9 +212,9 @@
       }
     },
     created(){
-      getAllStudents().then(res=>{
-        console.log(res);
-        this.studentList = res.data.data
+      getAllStudents(this.pagehelper.currentPage).then(res=>{
+        this.studentList = res.data.data.list
+        this.pagehelper.total = res.data.data.count;
       })
     },
     methods:{
@@ -224,7 +248,6 @@
           type: 'warning'
         }).then(()=>{
           delStudent(student).then(res => {
-            console.log(res);
             if(res.data.code == 0){
               this.$alert('删除成功！', '提示', {
                   confirmButtonText: '确定',
@@ -243,7 +266,6 @@
           if (valid) {
             // console.log(this.teacherInfo);
             editInfo(this.studentInfo).then(res => {
-              console.log(res);
               if (res.data.data.code == 2000) {
                 this.$alert('个人信息修改成功！', '提示', {
                   confirmButtonText: '确定',
@@ -267,15 +289,32 @@
         });
       },
       resetForm() {
-        this.teacherInfo.loginName = '';
-        this.teacherInfo.teacherName = '';
-        this.teacherInfo.college = '';
-        this.teacherInfo.teacherPost = '';
-        this.teacherInfo.email = '';
-        this.teacherInfo.phone = '';
-        this.teacherInfo.sex = '';
-        this.teacherInfo.teacherPwd = '';
-      }
+        this.studentInfo.classNumber = ""
+        this.studentInfo.college = ""
+        this.studentInfo.email = ""
+        this.studentInfo.loginName = ""
+        this.studentInfo.phone = ""
+        this.studentInfo.sex = ""
+        this.studentInfo.speciality = ""
+        this.studentInfo.studentName = ""
+        this.studentInfo.studentPwd = ""
+      },
+
+      nextpage(){
+        getAllStudents(++this.pagehelper.currentPage).then(res=>{
+          this.studentList = res.data.data.list
+        })
+      },
+      prevpage(){
+        getAllStudents(--this.pagehelper.currentPage).then(res=>{
+          this.studentList = res.data.data.list
+        })
+      },
+      changepage(){
+        getAllStudents(this.pagehelper.currentPage).then(res=>{
+          this.studentList = res.data.data.list
+        })
+      },
     },
     components: {
     }
@@ -310,5 +349,14 @@
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+  }
+
+  .el-page{
+    margin-top: 10px;
+    margin-left: 200px;
+    margin-bottom: 20px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
   }
 </style>

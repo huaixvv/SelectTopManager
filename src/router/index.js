@@ -21,6 +21,8 @@ const ManagerHome = () => import('views/managerHome/ManagerHome')
 const Teacher = () => import('views/managerHome/TeacherInfo')
 const StudentInfo = () => import('views/managerHome/StudentInfo')
 const ManagerInfo = () => import('views/managerHome/ManagerInfo')
+const BatchImport = () => import('views/managerHome/BatchImport')
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -111,7 +113,11 @@ const routes = [
         path: '/manager/manager-info',
         component: ManagerInfo
       },
-
+      {
+        path: '/manager/batch-import',
+        component: BatchImport
+      },
+      
     ]
   }
 ];

@@ -2,13 +2,13 @@ import { studentRequest } from './request';
 
 
 //login
-export function getStudentByName(loginName, studentPwd) {
+export function getStudentByName(loginName, pwd) {
   return studentRequest({
     url: '/student/login',
     method: 'post',
     params: {
       loginName,
-      studentPwd
+      pwd
     }
   })
 }
@@ -34,7 +34,7 @@ export function getCountThesis() {
 }
 
 //条件查询课题
-export function getThesis(sisName, sisTeacher, sisCollege, pageNum, pageSize=5) {
+export function getThesis(sisName, sisTeacher, sisCollege, pageNum, pageSize=7) {
   return studentRequest({
     url: '/student/getThesis',
     method: 'get',

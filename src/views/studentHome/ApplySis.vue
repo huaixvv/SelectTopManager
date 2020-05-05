@@ -66,7 +66,7 @@
       </el-upload>
       <div class="subtn">
         <el-form-item >
-          <el-button type="primary" @click="submitForm('thesisData')">立即创建</el-button>
+          <el-button type="primary" @click="submitForm('thesisData')">立即申报</el-button>
           <el-button @click="resetForm('thesisData')">重置</el-button>
         </el-form-item>
       </div>

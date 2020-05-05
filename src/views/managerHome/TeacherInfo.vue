@@ -3,8 +3,25 @@
     <p class="el-icon-caret-right">&nbsp;教师列表：</p>
     <div class="add-btn">
       <el-button type="primary" size="small" icon="el-icon-plus" @click="addteacher">添加教师</el-button>
-      <el-button type="primary" size="small" icon="el-icon-folder-add">批量导入</el-button>
+      <!-- <el-button type="primary" size="small" icon="el-icon-folder-add">批量导入</el-button> -->
     </div>
+
+  <!-- 分页 -->
+    <div class="block el-page">
+      <el-pagination
+        background
+        small
+        @prev-click="prevpage"
+        @next-click="nextpage"
+        @current-change="changepage"
+        layout="prev, pager, next"
+        :total="pagehelper.total"
+        :page-size="pagehelper.pageSize"
+        :current-page.sync="pagehelper.currentPage"
+        >
+      </el-pagination>
+    </div>
+
     <el-table
       size="small"
       :data="teacherList"
@@ -146,6 +163,12 @@
           sex: '',
           teacherPwd:''
         },
+        pagehelper: {
+          count: 0,
+          total: 0,
+          pageSize: 5,
+          currentPage:1
+        },
         rules: {
           college: [
             { required: true, message: '请选择所属学院', trigger: 'change' }
@@ -170,9 +193,10 @@
       }
     },
     created(){
-      getAllTeachers().then(res=>{
+      getAllTeachers(this.pagehelper.currentPage).then(res=>{
         console.log(res);
-        this.teacherList = res.data.data
+        this.teacherList = res.data.data.list
+        this.pagehelper.total = res.data.data.count;
       })
     },
     methods:{
@@ -254,7 +278,27 @@
         this.teacherInfo.phone = '';
         this.teacherInfo.sex = '';
         this.teacherInfo.teacherPwd = '';
-      }
+      },
+
+      nextpage(){
+        getAllTeachers(++this.pagehelper.currentPage).then(res=>{
+          console.log(res);
+          this.teacherList = res.data.data.list
+        })
+      },
+      prevpage(){
+        getAllTeachers(--this.pagehelper.currentPage).then(res=>{
+          console.log(res);
+          this.teacherList = res.data.data.list
+        })
+      },
+      changepage(){
+        getAllTeachers(this.pagehelper.currentPage).then(res=>{
+          console.log(res);
+          this.teacherList = res.data.data.list
+        })
+      },
+
     },
     components: {
     }
@@ -276,5 +320,14 @@
   .add-btn{
     float: right;
     margin: 60px 72px 30px 0px;
+  }
+
+  .el-page{
+    margin-top: 10px;
+    margin-left: 200px;
+    margin-bottom: 20px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
   }
 </style>

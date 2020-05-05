@@ -68,7 +68,7 @@
             })
             break;
           case '学生':
-            getStudentByName(this.loginform.username).then(res => {
+            getStudentByName(this.loginform.username, this.loginform.password).then(res => {
                if(res.data.code == 0) {
                 window.sessionStorage.setItem("student", res.data.data.studentId);
                 window.sessionStorage.setItem("studentName", res.data.data.studentName);
@@ -115,9 +115,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(rgba(255, 255, 255, 0.3),
-     rgba(255, 255, 255, 0.3)), 
-     url('../../assets/img/loginbcg2.jpg') no-repeat center;
+    background: linear-gradient(rgba(255, 255, 255, 0.1),
+     rgba(255, 255, 255, 0.1)), 
+     url('../../assets/img/lg3.jpg') no-repeat center;
     /* background: url('../../assets/img/loginbcg2.jpg') no-repeat center; */
     background-size: 100% 100%;
     height: 700px;

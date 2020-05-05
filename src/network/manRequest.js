@@ -36,11 +36,13 @@ export function editManager(manager) {
 }
 
 //获取所有教师信息
-export function getAllTeachers() {
+export function getAllTeachers(pageNum, pageSize=7) {
   return managerRequest({
     url: '/manager/allteachers',
     method: 'get',
     params: {
+      pageNum,
+      pageSize,
     }
   })
 }
@@ -58,11 +60,13 @@ export function delTeacher(teacher) {
 }
 
 //获取学生信息
-export function getAllStudents() {
+export function getAllStudents(pageNum, pageSize=7) {
   return managerRequest({
     url: '/manager/allstudents',
     method: 'get',
     params: {
+      pageNum,
+      pageSize
     }
   })
 }
@@ -74,6 +78,28 @@ export function delStudent(student) {
     method: 'post',
     params: {
       student
+    }
+  })
+}
+
+//批量导入教师
+export function ipmortTeachers(teacherList) {
+  return managerRequest({
+    url: '/manager/ipmortTeachers',
+    method: 'post',
+    params: {
+      teacherList
+    }
+  })
+}
+
+//批量导入教师
+export function ipmortStudents(studentList) {
+  return managerRequest({
+    url: '/manager/ipmortStudents',
+    method: 'post',
+    params: {
+      teacherList
     }
   })
 }
